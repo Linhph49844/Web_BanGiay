@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Giày Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Background gradient đẹp mắt */
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ff7eb3 !important;
+            text-decoration: underline;
+        }
+
+        .jumbotron {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .jumbotron:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: #ff5a5f;
+            border: none;
+            font-size: 1.3em;
+            padding: 15px 30px;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #ff3b3f;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 1em;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer a {
+            color: #ff7eb3;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* Tạo dropdown khi di chuột vào tên tài khoản */
+        .account-dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            min-width: 150px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropdown-menu a {
+            color: #333;
+        }
+
+        .dropdown-menu a:hover {
+            color: #ff7eb3;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
+                <strong>Shop Giày</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/hien-thi}">🏠 Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/san-pham}">👟 Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/dang-nhap}">🛒 Giỏ hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/lien-he}">📞 Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="container mt-5 text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">🔥 Khám phá thế giới giày chất lượng 🔥</h1>
+        <p class="lead">Những mẫu giày mới nhất từ Nike, Adidas, Puma... sẵn sàng cho bạn.</p>
+        <a class="btn btn-primary btn-lg" th:href="@{/sanpham/san-pham}">Khám phá ngay!</a>
+    </div>
+</section>
+
+<footer class="footer text-white text-center">
+    <p>&copy; 2025 Shop Giày Online | Liên hệ: shopgiay@example.com</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

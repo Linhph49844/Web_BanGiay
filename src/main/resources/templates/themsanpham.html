@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm Sản Phẩm - Shop Giày Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            padding-top: 30px;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 10px 0;
+        }
+
+        .navbar-brand {
+            color: white !important;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background-color: #000; /* Nền đen */
+            padding: 10px 15px; /* Cung cấp khoảng cách cho chữ */
+            border-radius: 5px; /* Thêm bo góc */
+        }
+
+        .navbar-brand img {
+            width: 40px;
+            margin-right: 10px; /* Khoảng cách giữa hình ảnh và chữ */
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #ff7eb3;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .form-label {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            border-color: #ff7eb3;
+            box-shadow: 0 0 10px rgba(255, 126, 179, 0.5);
+        }
+
+        .btn-success {
+            background-color: #ff7eb3;
+            border: none;
+            color: white;
+            font-size: 1.1em;
+            padding: 12px 20px;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn-success:hover {
+            background-color: #ff3b3f;
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 15px;
+            color: white;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer p {
+            font-size: 1em;
+            margin: 0;
+        }
+
+        /* Hiệu ứng hover cho các mục trong navbar */
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+            transition: transform 0.3s ease, color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ff7eb3 !important;
+            transform: scale(1.05);
+            text-decoration: underline;
+        }
+
+        /* Responsive design cho các màn hình nhỏ */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+</header>
+
+<section class="container mt-5">
+    <h2>Thêm Sản Phẩm Mới</h2>
+    <form action="/quanli/san-pham/add" method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên Sản Phẩm</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên sản phẩm" required>
+        </div>
+        <div class="mb-3">
+            <label for="price" class="form-label">Giá</label>
+            <input type="number" step="0.01" class="form-control" id="price" name="price" placeholder="Nhập giá sản phẩm" required>
+        </div>
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Số Lượng</label>
+            <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Nhập số lượng sản phẩm" required>
+        </div>
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Danh Mục</label>
+            <select class="form-select" id="category_id" name="category_id" required>
+                <option value="" disabled selected>Chọn danh mục sản phẩm</option>
+                <option th:each="danhMuc : ${listDanhMuc}" th:value="${danhMuc.id}" th:text="${danhMuc.name}"
+                        th:selected="${sanPham.danhMuc != null && sanPham.danhMuc.id == danhMuc.id}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Thêm Sản Phẩm</button>
+    </form>
+    <!-- Nút quay lại -->
+    <div class="text-center mt-3">
+        <a href="/quanli/san-pham" class="btn btn-secondary">Quay lại</a>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

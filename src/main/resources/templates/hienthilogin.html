@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Shop Giày Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Background gradient đẹp mắt */
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ff7eb3 !important;
+            text-decoration: underline;
+        }
+
+        .dropdown-menu {
+            display: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            color: #333;
+            padding: 15px;
+            text-decoration: none;
+        }
+
+        .dropdown-menu a:hover {
+            color: #ff7eb3;
+            background-color: #f0f0f0;
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 1em;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Căn chỉnh các mục navbar đều nhau */
+        .navbar-nav {
+            flex-grow: 1; /* Cho phép các phần tử navbar chiếm không gian */
+            display: flex;
+            justify-content: center; /* Phân phối đều các phần tử trong navbar */
+        }
+
+        /* Tạo độ rộng cho dropdown */
+        .dropdown-menu {
+            width: 200px; /* Chỉnh sửa độ rộng của dropdown */
+        }
+
+        /* Đặt tên tài khoản ở góc phải */
+        .dropdown {
+            margin-left: auto; /* Di chuyển dropdown sang bên phải */
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
+                <strong>Shop Giày</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/hien-thi}">🏠 Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/san-pham}">👟 Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/gio-hang}">🛒 Giỏ hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/lien-he}">📞 Liên hệ</a></li>
+                </ul>
+                <!-- Tạo dropdown cho tài khoản người dùng -->
+                <div class="dropdown ms-auto">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span th:text="${username}">Tên tài khoản</span> <!-- Hiển thị tên tài khoản -->
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" href="/giay/lich-su">Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item" href="/giay/dang-nhap">Chuyển tài khoản</a></li>
+                        <li><a class="dropdown-item" href="/giay/dang-xuat">Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="container mt-5 text-center">
+    <div class="jumbotron">
+        <h1 class="display-4">🔥 Khám phá thế giới giày chất lượng 🔥</h1>
+        <p class="lead">Chào bạn <span th:text="${username}">Tên tài khoản</span></p>
+        <a class="btn btn-primary btn-lg" th:href="@{/giay/san-pham}">Khám phá ngay!</a>
+    </div>
+</section>
+
+<footer class="footer text-white text-center">
+    <p>&copy; 2025 Shop Giày Online | Liên hệ: shopgiay@example.com</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

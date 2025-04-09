@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Nhân Viên - Shop Giày Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(90deg, red, blue, purple); /* 3 màu: đỏ, xanh, tím */
+            background-size: 300% 100%; /* Tạo không gian rộng để hiệu ứng di chuyển */
+            animation: rainbow 5s linear infinite; /* Hiệu ứng chạy màu */
+            padding: 15px;
+        }
+
+        .navbar:hover {
+            background-size: 400% 100%; /* Khi hover sẽ tăng độ rộng của gradient */
+        }
+
+        .nav-link {
+            color: white !important;
+            font-size: 1.1em;
+            padding: 10px 15px;
+            transition: transform 0.3s ease, color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ff7eb3 !important;
+            transform: scale(1.05);
+            text-decoration: underline;
+        }
+
+        .footer {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            font-size: 1em;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 0%;
+            }
+            50% {
+                background-position: 100% 0%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+        /* Tạo kiểu đẹp cho bảng */
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 10px; /* Bo tròn góc bảng */
+            overflow: hidden; /* Đảm bảo không có góc vuông thò ra */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho bảng */
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #6a0dad; /* Màu nền tím cho tiêu đề bảng */
+            color: white; /* Màu chữ trắng */
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ff7eb3; /* Viền dưới màu hồng */
+            border-radius: 10px; /* Bo tròn góc của các th */
+        }
+
+        td {
+            background-color: #f8f9fa; /* Nền sáng cho các ô dữ liệu */
+            color: #333; /* Màu chữ tối cho dễ đọc */
+            border-bottom: 1px solid #ddd; /* Viền dưới các ô */
+            border-radius: 10px; /* Bo tròn các ô dữ liệu */
+        }
+
+        /* Thêm hiệu ứng hover */
+        tr:hover {
+            background-color: #ffe6f2; /* Màu nền sáng khi hover qua dòng */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Thêm bóng mờ khi hover qua dòng */
+        }
+
+        /* Cải thiện nút "Chỉnh sửa" */
+        .btn-warning {
+            background-color: #ff7eb3;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 50px; /* Bo tròn góc nút chỉnh sửa */
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-warning:hover {
+            background-color: #ff758c;
+            cursor: pointer;
+        }
+
+        .btn-warning:active {
+            transform: scale(0.98); /* Nút nhỏ lại khi nhấn */
+        }
+
+        /* Cải thiện thanh tìm kiếm */
+        .form-control {
+            background-color: #f0f0f0;
+            border: 2px solid #ff7eb3;
+            border-radius: 30px;
+            padding: 10px 15px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: #fff;
+            border-color: #ff758c;
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+            outline: none;
+        }
+
+        button[type="submit"] {
+            background-color: #ff7eb3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #ff758c;
+            transform: scale(1.05);
+        }
+
+        /* Đảm bảo các phần tử không bị tràn */
+        .mb-3 {
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/quanli/hien-thi">
+                <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
+                <strong>Shop Giày</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/quanli/hien-thi">🏠 Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/quanli/nhan-vien">👨‍💼 Nhân viên</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/quanli/khach-hang">👥 Khách hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/quanli/san-pham">👟 Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/quanli/doanh-thu">📊 Doanh thu</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<section class="container mt-5">
+    <h1 class="text-center">👑 Quản Lý Nhân Viên</h1>
+
+    <!-- Nút "Thêm Nhân Viên" -->
+    <div class="text-center mb-3">
+        <a href="/quanli/nhan-vien/them" class="btn btn-success">Thêm Nhân Viên</a>
+    </div>
+
+    <form method="get" action="/quanli/nhan-vien">
+        <input type="text" name="query" placeholder="Tìm kiếm nhân viên theo tên..." class="form-control" />
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+    </form>
+
+    <!-- Employee table -->
+    <table class="table table-striped mt-4">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên nhân viên</th>
+            <th>Tên tài khoản</th>
+            <th>Mật khẩu</th>  <!-- Cột mật khẩu -->
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Email</th>
+            <th>Số điện thoại</th> <!-- Cột Số điện thoại -->
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="nhanVien : ${listNhanVien}">
+            <td th:text="${nhanVien.id}"></td>
+            <td th:text="${nhanVien.name}"></td>
+            <td th:text="${nhanVien.username}"></td>
+            <td th:text="${nhanVien.password}"></td>
+            <td th:text="${nhanVien.role.name}"></td>
+            <td th:text="${nhanVien.status}"></td>
+            <td th:text="${nhanVien.email}"></td>
+            <td th:text="${nhanVien.sdt}"></td>  <!-- Hiển thị số điện thoại -->
+            <td>
+                <!-- Sửa nhân viên -->
+                <a href="/quanli/nhan-vien/edit" th:href="@{/quanli/nhan-vien/edit/{id}(id=${nhanVien.id})}" class="btn btn-warning">Chỉnh sửa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</section>
+
+<footer class="footer text-white text-center p-3 mt-4">
+    <p>&copy; 2025 Shop Giày Online | Liên hệ: shopgiay@example.com</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

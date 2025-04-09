@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Sản Phẩm - Shop Giày Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 10px;
+        }
+
+        .nav-link {
+            color: white !important;
+            font-size: 1.1em;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            color: #ff7eb3 !important;
+            text-decoration: underline;
+        }
+
+        .search-bar {
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
+
+        .product-card {
+            background: #f8f9fa;
+            color: black;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px); /* Di chuyển lên khi hover */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* Tăng độ đổ bóng */
+        }
+
+        /* Sử dụng Grid để chia 4 sản phẩm mỗi hàng */
+        .product-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        /* Cho phép Grid điều chỉnh trên các màn hình nhỏ hơn */
+        @media (max-width: 1200px) {
+            .product-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .product-card img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        /* Danh mục sản phẩm */
+        .list-group {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);  /* Tạo nền mờ cho danh mục */
+            border-radius: 10px;  /* Bo góc cho danh mục */
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Thêm đổ bóng nhẹ cho danh mục */
+            background-color: #ff5a5f; /* Thêm nền mờ cho phần danh mục */
+            display: grid; /* Sử dụng grid để chia thành nhiều cột */
+            grid-template-columns: repeat(4, 1fr); /* Chia thành 4 cột */
+            gap: 15px; /* Khoảng cách giữa các item */
+        }
+
+        /* Các item danh mục */
+        .list-group-item {
+            border: none;
+            background-color: rgba(255, 255, 255, 0.15);  /* Tạo nền mờ cho từng item */
+            color: white;
+            font-size: 1.1em;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            display: block; /* Đảm bảo các item nằm thành một cột */
+        }
+
+        .list-group-item:hover {
+            background-color: #ffcc00;  /* Màu nền sáng khi hover */
+            cursor: pointer;  /* Hiển thị con trỏ khi hover */
+        }
+
+        /* Tăng chiều rộng của các item để trông đầy đặn hơn */
+        .list-group-item-action {
+            padding: 12px 25px;
+        }
+        h2{
+            color: black;
+        }
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            font-size: 1em;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+        /* Nút Thêm vào giỏ hàng */
+        .btn-primary {
+            background-color: #ff5a5f; /* Màu nền cho nút */
+            color: white; /* Màu chữ trắng */
+            font-size: 1em; /* Cỡ chữ */
+            padding: 10px 20px; /* Padding cho nút */
+            border-radius: 25px; /* Bo tròn góc */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển màu và phóng to */
+        }
+
+        /* Khi hover qua nút Thêm vào giỏ hàng */
+        .btn-primary:hover {
+            background-color: #ff3b3f; /* Thay đổi màu nền khi hover */
+            transform: scale(1.05); /* Phóng to nút khi hover */
+        }
+
+        /* Nút Xem Đánh Giá */
+        .btn-info {
+            background-color: #17a2b8; /* Màu nền cho nút */
+            color: white; /* Màu chữ trắng */
+            font-size: 1em; /* Cỡ chữ */
+            padding: 10px 20px; /* Padding cho nút */
+            border-radius: 25px; /* Bo tròn góc */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Hiệu ứng chuyển màu và phóng to */
+        }
+
+        /* Khi hover qua nút Xem Đánh Giá */
+        .btn-info:hover {
+            background-color: #138496; /* Thay đổi màu nền khi hover */
+            transform: scale(1.05); /* Phóng to nút khi hover */
+        }
+
+        /* Khoảng cách giữa các nút */
+        .product-card .btn {
+            margin-top: 10px; /* Khoảng cách giữa các nút */
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
+                <strong>Shop Giày</strong>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/hien-thi}">🏠 Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/san-pham}">👟 Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/giay/dang-nhap}">🛒 Giỏ hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/sanpham/lien-he}">📞 Liên hệ</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Thanh tìm kiếm -->
+<section class="container search-bar">
+    <form action="/sanpham/search" method="GET" class="d-flex justify-content-center">
+        <input type="text" name="query" class="form-control w-50" placeholder="Tìm kiếm sản phẩm..." />
+        <button type="submit" class="btn btn-primary ms-2">Tìm kiếm</button>
+    </form>
+</section>
+
+<!-- Danh mục sản phẩm -->
+<section class="container mb-4">
+    <h2 class="text-center">Danh Mục Sản Phẩm</h2>
+    <div class="list-group">
+        <a href="/sanpham/danhmuc/1" class="list-group-item list-group-item-action">Giày Nam</a>
+        <a href="/sanpham/danhmuc/2" class="list-group-item list-group-item-action">Giày Nữ</a>
+        <a href="/sanpham/danhmuc/3" class="list-group-item list-group-item-action">Giày Trẻ Em</a>
+        <a href="/sanpham/danhmuc/4" class="list-group-item list-group-item-action">Giày Thể Thao</a>
+        <a href="/sanpham/danhmuc/5" class="list-group-item list-group-item-action">Giày Công Sở</a>
+        <a href="/sanpham/danhmuc/6" class="list-group-item list-group-item-action">Dép</a>
+        <a href="/sanpham/danhmuc/7" class="list-group-item list-group-item-action">Phụ kiện</a>
+    </div>
+</section>
+
+<section class="container mt-4">
+    <!-- Sản phẩm theo danh mục -->
+    <div class="product-row">
+        <!-- Lặp qua danh sách sản phẩm từ controller -->
+        <div class="col" th:each="sanPham : ${listSanPham}">
+            <div class="product-card">
+                <h5 class="text-center mt-3" th:text="${sanPham.name}"></h5>
+                <p class="text-center" th:text="'Giá: ' + ${sanPham.price} + ' VND'"></p>
+                <p class="text-center" th:text="'Số lượng: ' + ${sanPham.quantity}"></p>
+                <p class="text-center" th:text="'Danh Mục: ' + ${sanPham.danhMuc.name}"></p>
+                <div class="text-center">
+                    <a class="btn btn-primary btn-sm" th:href="@{/giay/dang-nhap}">Thêm vào giỏ hàng</a>
+                    <!-- Nút Xem Đánh Giá -->
+                    <a class="btn btn-info btn-sm mt-2" th:href="@{/sanpham/{id}/reviews(id=${sanPham.id})}">Xem Đánh Giá</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="footer text-white text-center p-3 mt-4">
+    <p>&copy; 2025 Shop Giày Online | Liên hệ: shopgiay@example.com</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
