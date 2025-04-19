@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Thống Kê Doanh Thu - Shop Giày Online</title>
+    <title>Doanh Thu - Shop Giày Online</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -12,14 +12,14 @@
         }
 
         .navbar {
-            background: linear-gradient(90deg, red, blue, purple); /* 3 màu: đỏ, xanh, tím */
-            background-size: 300% 100%; /* Tạo không gian rộng để hiệu ứng di chuyển */
-            animation: rainbow 5s linear infinite; /* Hiệu ứng chạy màu */
+            background: linear-gradient(90deg, red, blue, purple);
+            background-size: 300% 100%;
+            animation: rainbow 5s linear infinite;
             padding: 15px;
         }
 
         .navbar:hover {
-            background-size: 400% 100%; /* Khi hover sẽ tăng độ rộng của gradient */
+            background-size: 400% 100%;
         }
 
         .nav-link {
@@ -42,17 +42,67 @@
             box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Định nghĩa animation cho hiệu ứng màu cầu vồng */
         @keyframes rainbow {
-            0% {
-                background-position: 0% 0%;
-            }
-            50% {
-                background-position: 100% 0%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 1em;
+        }
+
+        th {
+            background-color: #6a0dad;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ff7eb3;
+            border-radius: 10px;
+        }
+
+        td {
+            background-color: #f8f9fa;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        tr:hover {
+            background-color: #ffe6f2;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button[type="submit"] {
+            background-color: #ff7eb3;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #ff758c;
+            transform: scale(1.05);
+        }
+
+        .mb-3 {
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -73,7 +123,7 @@
                     <li class="nav-item"><a class="nav-link" href="/quanli/hien-thi">🏠 Trang chủ</a></li>
                     <li class="nav-item"><a class="nav-link" href="/quanli/nhan-vien">👨‍💼 Nhân viên</a></li>
                     <li class="nav-item"><a class="nav-link" href="/quanli/khach-hang">👥 Khách hàng</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/quanli/san-pham">👟 Sản phẩm</a></li> <!-- Thêm mục Sản phẩm -->
+                    <li class="nav-item"><a class="nav-link" href="/quanli/san-pham">👟 Sản phẩm</a></li>
                     <li class="nav-item"><a class="nav-link" href="/quanli/doanh-thu">📊 Doanh thu</a></li>
                 </ul>
             </div>
@@ -82,45 +132,35 @@
 </header>
 
 <section class="container mt-5">
-    <h1 class="text-center">👑 Thống Kê Doanh Thu</h1>
+    <h1 class="text-center">👑 Doanh Thu</h1>
 
-    <!-- Tổng doanh thu -->
-    <div class="text-center mb-4">
-        <h3>Tổng doanh thu: <span id="total-revenue">0</span> VND</h3>
+    <div th:if="${#lists.isEmpty(doanhThuList)}" class="alert alert-warning">
+        Chưa có doanh thu nào.
     </div>
 
-    <!-- Biểu đồ doanh thu theo ngày -->
-    <h4>Doanh thu theo ngày</h4>
-    <table class="table table-striped mt-4">
+    <table class="table table-bordered mt-4" th:if="${!#lists.isEmpty(doanhThuList)}">
         <thead>
         <tr>
             <th>Ngày</th>
-            <th>Doanh thu</th>
+            <th>Tổng Doanh Thu</th>
+            <th>Đơn Hàng</th>
         </tr>
         </thead>
-        <tbody id="revenue-table">
-        <!-- Dữ liệu doanh thu theo ngày sẽ được hiển thị ở đây -->
+        <tbody>
+        <tr th:each="doanhThu : ${doanhThuList}">
+            <!-- Hiển thị ngày tháng, tổng doanh thu và chi tiết đơn hàng -->
+            <td th:text="${#dates.format(doanhThu.date, 'yyyy-MM-dd')}">Ngày</td>
+            <td th:text="${doanhThu.totalRevenue}">Tổng Doanh Thu</td>
+            <td>
+                <a th:href="@{/quanli/don-hang/{id}(id=${doanhThu.donHang.id})}" class="btn btn-info btn-sm">Chi Tiết</a>
+
+            </td>
+        </tr>
         </tbody>
     </table>
 
-    <!-- Tổng số đơn hàng -->
-    <h4>Tổng số đơn hàng theo trạng thái</h4>
-    <table class="table table-striped mt-4">
-        <thead>
-        <tr>
-            <th>Trạng thái</th>
-            <th>Số đơn hàng</th>
-        </tr>
-        </thead>
-        <tbody id="order-status-table">
-        <!-- Dữ liệu tổng số đơn hàng sẽ được hiển thị ở đây -->
-        </tbody>
-    </table>
-
-    <!-- Tổng số thanh toán -->
-    <h4>Tổng số thanh toán</h4>
-    <div class="text-center mb-4">
-        <h3 id="total-payments">0</h3>
+    <div class="text-center mt-4">
+        <a href="/quanli/hien-thi" class="btn btn-secondary">Quay lại</a>
     </div>
 </section>
 
@@ -129,62 +169,6 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Hàm lấy và hiển thị tổng doanh thu
-    function fetchTotalRevenue() {
-        // Thực hiện truy vấn tổng doanh thu từ API hoặc cơ sở dữ liệu
-        document.getElementById('total-revenue').innerText = '100000000 VND'; // Ví dụ, thay bằng dữ liệu thực tế
-    }
-
-    // Hàm lấy và hiển thị doanh thu theo ngày
-    function fetchRevenueByDate() {
-        const revenueData = [
-            { date: '2025-03-01', total_revenue: '15000000 VND' },
-            { date: '2025-03-02', total_revenue: '16000000 VND' },
-            { date: '2025-03-03', total_revenue: '17000000 VND' }
-        ];
-
-        const tableBody = document.getElementById('revenue-table');
-        revenueData.forEach(item => {
-            const row = `<tr>
-                <td>${item.date}</td>
-                <td>${item.total_revenue}</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
-    }
-
-    // Hàm lấy và hiển thị tổng số đơn hàng theo trạng thái
-    function fetchOrderStatus() {
-        const orderStatusData = [
-            { status: 'Đang xử lý', total_orders: 10 },
-            { status: 'Đã thanh toán', total_orders: 25 },
-            { status: 'Đã hủy', total_orders: 5 }
-        ];
-
-        const tableBody = document.getElementById('order-status-table');
-        orderStatusData.forEach(item => {
-            const row = `<tr>
-                <td>${item.status}</td>
-                <td>${item.total_orders}</td>
-            </tr>`;
-            tableBody.innerHTML += row;
-        });
-    }
-
-    // Hàm lấy và hiển thị tổng số thanh toán
-    function fetchTotalPayments() {
-        document.getElementById('total-payments').innerText = '50000000 VND'; // Ví dụ, thay bằng dữ liệu thực tế
-    }
-
-    // Gọi các hàm khi trang tải
-    window.onload = function() {
-        fetchTotalRevenue();
-        fetchRevenueByDate();
-        fetchOrderStatus();
-        fetchTotalPayments();
-    };
-</script>
 
 </body>
 </html>

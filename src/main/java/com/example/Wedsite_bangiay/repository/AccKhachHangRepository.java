@@ -13,4 +13,6 @@ public interface AccKhachHangRepository extends JpaRepository<AccKhachHang, Long
     // Tìm khách hàng theo username và password
     AccKhachHang findByUsernameAndPassword(String username, String password);
 
+    // Tìm khách hàng theo username
+    AccKhachHang findByUsername(String username);
 }

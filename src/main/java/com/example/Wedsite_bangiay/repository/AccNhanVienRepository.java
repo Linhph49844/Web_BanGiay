@@ -14,4 +14,7 @@ public interface AccNhanVienRepository extends JpaRepository<AccNhanVien, Long> 
 
     // Phương thức tìm nhân viên theo tên, không phân biệt chữ hoa chữ thường
     List<AccNhanVien> findByNameContainingIgnoreCase(String name);
+
+    // Tìm nhân viên theo tên đăng nhập và mật khẩu
+    AccNhanVien findByUsernameAndPassword(String username, String password);
 }

@@ -2,153 +2,58 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Xác Nhận Đơn Hàng - Shop Giày Online</title>
+    <title>Xác Nhận Đơn Hàng</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-
-        .navbar {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 15px;
-        }
-
-        .nav-link {
-            color: white !important;
-            font-size: 1.1em;
-            padding: 10px 15px;
-            transition: transform 0.3s ease, color 0.3s;
-        }
-
-        .nav-link:hover {
-            color: #ff7eb3 !important;
-            transform: scale(1.05);
-            text-decoration: underline;
-        }
-
-        .footer {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 20px;
-            font-size: 1em;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Table styles */
-        .table th, .table td {
-            vertical-align: middle;
-        }
-
-        /* Button hover effects */
-        .btn-custom {
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .btn-custom:hover {
-            transform: scale(1.05);
-            background-color: #ff3b3f;
-        }
-
-        .btn-confirm {
-            background-color: #28a745;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .btn-confirm:hover {
-            transform: scale(1.05);
-            background-color: #218838;
-        }
-
-        .btn-cancel {
-            background-color: #dc3545;
-            transition: transform 0.3s, background-color 0.3s;
-        }
-
-        .btn-cancel:hover {
-            transform: scale(1.05);
-            background-color: #c82333;
-        }
-
-    </style>
 </head>
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
-                <strong>Shop Giày</strong>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="/nhanvien/hien-thi">🏠 Trang chủ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/nhanvien/don-hang">📦 Đơn Hàng</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/nhanvien/kho-hang">👟 Sản Phẩm</a></li>
-                </ul>
-            </div>
-    </nav>
-</header>
+<div class="container mt-5">
+    <h2 class="text-center">Danh Sách Đơn Hàng Cần Xác Nhận</h2>
 
-<section class="container mt-5">
-    <h1 class="text-center">👑 Xác Nhận Đơn Hàng</h1>
+    <!-- Kiểm tra nếu có giỏ hàng -->
+    <div th:if="${gioHangs != null}">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Tên Khách Hàng</th>
+                <th>Tên Sản Phẩm</th>
+                <th>Số Lượng</th>
+                <th>Tổng Tiền</th>
+                <th>Trạng Thái</th>
+                <th>Hành Động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Lặp qua đơn hàng và hiển thị giỏ hàng -->
+            <tr th:each="order : ${gioHangs}">
+                <td th:text="${order.donHang.accKhachHang.name}">Tên Khách Hàng</td>
 
-    <!-- Table of Orders -->
-    <table class="table table-striped mt-4">
-        <thead>
-        <tr>
-            <th>ID Đơn Hàng</th>
-            <th>Tên Khách Hàng</th>
-            <th>Tổng Số Tiền</th>
-            <th>Trạng Thái</th>
-            <th>Hành Động</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td>#001</td>
-            <td>Nguyễn Văn A</td>
-            <td>1,500,000 VND</td>
-            <td><span class="badge bg-warning">Chờ xử lý</span></td>
-            <td>
-                <button class="btn btn-confirm">Xác nhận</button>
-                <button class="btn btn-cancel">Hủy</button>
-            </td>
-        </tr>
-        <tr>
-            <td>#002</td>
-            <td>Trần Thị B</td>
-            <td>2,000,000 VND</td>
-            <td><span class="badge bg-success">Đã thanh toán</span></td>
-            <td>
-                <button class="btn btn-confirm" disabled>Xác nhận</button>
-                <button class="btn btn-cancel" disabled>Hủy</button>
-            </td>
-        </tr>
-        <tr>
-            <td>#003</td>
-            <td>Lê Văn C</td>
-            <td>1,200,000 VND</td>
-            <td><span class="badge bg-danger">Đã hủy</span></td>
-            <td>
-                <button class="btn btn-confirm" disabled>Xác nhận</button>
-                <button class="btn btn-cancel" disabled>Hủy</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</section>
+                <!-- Lặp qua giỏ hàng của khách hàng để lấy tên sản phẩm và số lượng -->
+                <td th:text="${order.sanPham.name}">Tên Sản Phẩm</td>
+                <td th:text="${order.quantity}">Số Lượng</td>
 
-<footer class="footer text-white text-center p-3 mt-4">
-    <p>&copy; 2025 Shop Giày Online | Liên hệ: shopgiay@example.com</p>
-</footer>
+                <!-- Tính tổng tiền cho đơn hàng -->
+                <td th:text="${order.sanPham.price * order.quantity}">Tổng Tiền</td>
+
+                <td th:text="${order.donHang.status}">Trạng Thái</td>
+
+                <td>
+                    <!-- Form xác nhận đơn hàng -->
+                    <form th:action="@{/nhanvien/don-hang/{id}/confirm(id=${order.id})}" method="post">
+                        <button type="submit" class="btn btn-success">Xác Nhận</button>
+                    </form>
+                    <!-- Form hủy đơn hàng -->
+                    <form th:action="@{/nhanvien/don-hang/{id}/cancel(id=${order.id})}" method="post">
+                        <button type="submit" class="btn btn-danger">Hủy Xác Nhận</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>

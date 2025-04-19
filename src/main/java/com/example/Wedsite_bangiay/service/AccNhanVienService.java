@@ -57,4 +57,9 @@ public class AccNhanVienService {
     public List<AccNhanVien> searchNhanVien(String query) {
         return accNhanVienRepository.findByNameContainingIgnoreCase(query);  // Tìm kiếm theo tên
     }
+
+    // Tìm nhân viên theo tên đăng nhập và mật khẩu
+    public AccNhanVien findByUsernameAndPassword(String username, String password) {
+        return accNhanVienRepository.findByUsernameAndPassword(username, password);
+    }
 }

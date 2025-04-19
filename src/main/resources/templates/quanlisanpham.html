@@ -194,7 +194,7 @@
                     <a class="btn btn-danger btn-sm" th:href="@{/quanli/san-pham/delete/{id}(id=${sanPham.id})}"
                        onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">Xóa</a>
                     <!-- Nút xem bình luận -->
-                    <a class="btn btn-info btn-sm" th:href="@{/quanli/san-pham/{id}/binh-luan(id=${sanPham.id})}">Xem bình luận</a>
+                    <a class="btn btn-info btn-sm mt-2" th:href="@{/quanli/{id}/danhgia(id=${sanPham.id})}">Xem Đánh Giá</a>
                 </div>
             </div>
         </div>

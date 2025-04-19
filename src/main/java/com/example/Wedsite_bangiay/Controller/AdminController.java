@@ -1,13 +1,7 @@
 package com.example.Wedsite_bangiay.Controller;
 
-import com.example.Wedsite_bangiay.model.AccKhachHang;
-import com.example.Wedsite_bangiay.model.AccNhanVien;
-import com.example.Wedsite_bangiay.model.DanhMuc;
-import com.example.Wedsite_bangiay.model.SanPham;
-import com.example.Wedsite_bangiay.service.AccKhachHangService;
-import com.example.Wedsite_bangiay.service.AccNhanVienService;
-import com.example.Wedsite_bangiay.service.DanhMucService;
-import com.example.Wedsite_bangiay.service.SanPhamService;
+import com.example.Wedsite_bangiay.model.*;
+import com.example.Wedsite_bangiay.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,6 +25,15 @@ public class AdminController {
 
     @Autowired
     private AccKhachHangService accKhachHangService;
+
+    @Autowired
+    private ReviewsService reviewsService;
+
+    @Autowired
+    private DoanhThuService doanhThuService;
+
+    @Autowired
+    private DonHangService donHangService;
 
     @GetMapping("hien-thi")
     public String hienThi(Model model) {
@@ -216,8 +219,35 @@ public class AdminController {
         return "redirect:/quanli/khach-hang";  // Quay lại trang danh sách khách hàng
     }
 
-    @GetMapping("doanh-thu")
-    public String doanhthu(Model model) {
-        return "doanhthu";  // Trang quản lý doanh thu
+    @GetMapping("/{id}/danhgia")
+    public String hienThiDanhGia(@PathVariable("id") Long idSanPham, Model model) {
+        SanPham sanPham = sanPhamService.getSanPhamById(idSanPham).orElse(null);
+        List<Reviews> reviewsList = reviewsService.getReviewsByProductId(idSanPham);
+
+        model.addAttribute("sanPham", sanPham);
+        model.addAttribute("reviews", reviewsList);
+
+        model.addAttribute("sanPham", sanPham);
+        return "reviewslogin";  // Trả về view reviewslogin.html
+    }
+
+    // Lấy tất cả doanh thu
+    @GetMapping("/doanh-thu")
+    public String getAllDoanhThu(Model model) {
+        List<DoanhThu> doanhThuList = doanhThuService.getAllDoanhThu();
+        model.addAttribute("doanhThuList", doanhThuList);
+        return "doanhthu";  // Trang hiển thị danh sách doanh thu
+    }
+
+    @GetMapping("/don-hang/{id}")
+    public String getDonHangDetails(@PathVariable("id") Long id, Model model) {
+        DonHang donHang = donHangService.findById(id);
+        if (donHang != null) {
+            model.addAttribute("donHang", donHang);
+            return "chitietdonhang";  // Template chi tiết đơn hàng
+        } else {
+            model.addAttribute("error", "Không tìm thấy đơn hàng.");
+            return "error";  // Template lỗi nếu không tìm thấy đơn hàng
+        }
     }
 }

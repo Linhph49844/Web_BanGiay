@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "donhang")
-public class DonHang {
+@Table(name = "lichsu_mua_hang")
+public class LichSuMuaHang {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,11 +23,11 @@ public class DonHang {
     @JoinColumn(name = "user_id")
     private AccKhachHang accKhachHang;
 
-    @Column (name = "total_amount")
-    private BigDecimal totalAmount;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private SanPham sanPham;
 
-    private String status;
+    private int quantity;
 
-    @OneToMany(mappedBy = "donHang")
-    private List<SanPham> sanPhamList;
+    private BigDecimal total_amount;
 }

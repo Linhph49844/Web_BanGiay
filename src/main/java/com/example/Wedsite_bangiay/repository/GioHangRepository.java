@@ -12,4 +12,5 @@ public interface GioHangRepository extends JpaRepository<GioHang, Long> {
     // Tìm giỏ hàng theo userId và productId
     Optional<GioHang> findByUserIdAndProductId(Long userId, Long productId);
 
+    void deleteByUserId(Long userId);  // Xóa giỏ hàng theo userId
 }

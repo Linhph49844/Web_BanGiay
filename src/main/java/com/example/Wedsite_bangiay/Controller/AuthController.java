@@ -1,18 +1,15 @@
 package com.example.Wedsite_bangiay.Controller;
 
-import com.example.Wedsite_bangiay.model.AccKhachHang;
-import com.example.Wedsite_bangiay.model.GioHang;
-import com.example.Wedsite_bangiay.model.SanPham;
-import com.example.Wedsite_bangiay.service.AccKhachHangService;
-import com.example.Wedsite_bangiay.service.DanhMucService;
-import com.example.Wedsite_bangiay.service.GioHangService;
-import com.example.Wedsite_bangiay.service.SanPhamService;
+import com.example.Wedsite_bangiay.model.*;
+import com.example.Wedsite_bangiay.repository.ReviewsRepository;
+import com.example.Wedsite_bangiay.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +28,48 @@ public class AuthController {
 
     @Autowired
     private AccKhachHangService accKhachHangService;
+
+    @Autowired
+    private LichSuMuaHangService lichSuMuaHangService;
+
+    @Autowired
+    private ReviewsService reviewsService;
+
+    // Hiển thị trang đăng ký
+    @GetMapping("dang-ky")
+    public String dangKy() {
+        return "dangky"; // Trang đăng ký
+    }
+
+    @PostMapping("dang-ky")
+    public String dangKy(@RequestParam("username") String username,
+                         @RequestParam("password") String password,
+                         @RequestParam("email") String email,
+                         @RequestParam("sdt") String sdt,
+                         @RequestParam("diachi") String diachi,
+                         @RequestParam("name") String name,
+                         Model model) {
+
+        // Kiểm tra các trường yêu cầu không được để trống
+        if (username.isEmpty() || password.isEmpty() || email.isEmpty() || sdt.isEmpty() || diachi.isEmpty() || name.isEmpty()) {
+            model.addAttribute("error", "Tất cả các trường đều phải được điền đầy đủ!");
+            return "dangky"; // Trở về trang đăng ký nếu có trường trống
+        }
+
+        // Tạo đối tượng AccKhachHang mới
+        AccKhachHang accKhachHang = new AccKhachHang();
+        accKhachHang.setUsername(username);
+        accKhachHang.setPassword(password);  // Chú ý cần mã hóa mật khẩu nếu cần
+        accKhachHang.setEmail(email);
+        accKhachHang.setSdt(sdt);
+        accKhachHang.setDiachi(diachi);
+        accKhachHang.setName(name); // Set giá trị cho trường name
+
+        // Lưu khách hàng vào cơ sở dữ liệu
+        accKhachHangService.saveKhachHang(accKhachHang);
+
+        return "redirect:/giay/dang-nhap"; // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+    }
 
     // Hiển thị trang đăng nhập
     @GetMapping("dang-nhap")
@@ -103,6 +142,34 @@ public class AuthController {
         return "sanphamlogin"; // Hiển thị kết quả tìm kiếm
     }
 
+    // Hiển thị giỏ hàng của người dùng
+    @GetMapping("/gio-hang")
+    public String hienThiGioHang(Model model, HttpSession session) {
+        // Lấy thông tin người dùng từ session
+        AccKhachHang user = (AccKhachHang) session.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("username", user.getUsername()); // Truyền tên tài khoản vào model
+        }
+        if (user == null) {
+            return "redirect:/giay/dang-nhap";  // Nếu người dùng chưa đăng nhập, chuyển đến trang đăng nhập
+        }
+
+        // Lấy giỏ hàng của người dùng từ service
+        List<GioHang> gioHangs = gioHangService.getGioHangByUserId(user.getId());
+
+        // Tính tổng tiền của giỏ hàng
+        BigDecimal totalAmount = gioHangs.stream()
+                .map(item -> item.getProduct().getPrice().multiply(new BigDecimal(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Truyền giỏ hàng, tổng tiền và người dùng vào model
+        model.addAttribute("gioHangs", gioHangs);
+        model.addAttribute("totalAmount", totalAmount);  // Truyền tổng tiền vào view
+        model.addAttribute("user", user);
+
+        return "giohang";  // Tên của trang giỏ hàng
+    }
+
     @PostMapping("/giohang/them/{id}")
     public String themVaoGioHang(@PathVariable Long id, @RequestParam(defaultValue = "1") int quantity, HttpSession session) {
         // Lấy thông tin người dùng từ session
@@ -142,25 +209,6 @@ public class AuthController {
         return "redirect:/giay/gio-hang"; // Quay lại trang giỏ hàng
     }
 
-    // Hiển thị giỏ hàng của người dùng
-    @GetMapping("/gio-hang")
-    public String hienThiGioHang(Model model, HttpSession session) {
-        // Lấy thông tin người dùng từ session
-        AccKhachHang user = (AccKhachHang) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/giay/dang-nhap";  // Nếu người dùng chưa đăng nhập, chuyển đến trang đăng nhập
-        }
-
-        // Lấy giỏ hàng của người dùng từ service
-        List<GioHang> gioHangs = gioHangService.getGioHangByUserId(user.getId());
-
-        // Truyền giỏ hàng và người dùng vào model
-        model.addAttribute("gioHangs", gioHangs);
-        model.addAttribute("user", user);
-
-        return "giohang";  // Tên của trang giỏ hàng
-    }
-
     @PostMapping("/gio-hang/cap-nhat/{gioHangId}")
     public String capNhatSoLuong(@PathVariable Long gioHangId,
                                  @RequestParam("quantity") int quantity,
@@ -187,15 +235,76 @@ public class AuthController {
         return "lienhelogin";
     }
 
-    // Hiển thị lịch sử mua hàng
-    @GetMapping("lich-su")
-    public String lichsu(Model model, HttpSession session) {
+    @GetMapping("/{id}/danhgia")
+    public String hienThiDanhGia(@PathVariable("id") Long idSanPham, Model model) {
+        SanPham sanPham = sanPhamService.getSanPhamById(idSanPham).orElse(null);
+        List<Reviews> reviewsList = reviewsService.getReviewsByProductId(idSanPham);
+
+        model.addAttribute("sanPham", sanPham);
+        model.addAttribute("reviews", reviewsList);
+
+        model.addAttribute("sanPham", sanPham);
+        return "reviewslogin";  // Trả về view reviewslogin.html
+    }
+
+    // Hiển thị lịch sử mua hàng của người dùng
+    @GetMapping("/lich-su-mua-hang")
+    public String hienThiLichSuMuaHang(Model model, HttpSession session) {
         // Lấy thông tin người dùng từ session
         AccKhachHang user = (AccKhachHang) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("username", user.getUsername()); // Truyền tên tài khoản vào model
+        if (user == null) {
+            return "redirect:/giay/dang-nhap";  // Nếu người dùng chưa đăng nhập, chuyển đến trang đăng nhập
         }
-        return "lichsumuahang";
+
+        // Lấy danh sách lịch sử mua hàng của người dùng
+        List<LichSuMuaHang> lichSuMuaHangList = lichSuMuaHangService.getLichSuMuaHangByUserId(user.getId());
+
+        // Truyền danh sách vào model
+        model.addAttribute("lichSuMuaHangList", lichSuMuaHangList);
+
+        return "lichsumuahang";  // Tên của view (HTML) để hiển thị danh sách
+    }
+
+    // Hiển thị form sửa đánh giá sản phẩm
+    @GetMapping("/danhgiasanpham/{id}")
+    public String danhGiaSanPham(@PathVariable("id") Long productId, HttpSession session, Model model) {
+        // Lấy thông tin sản phẩm
+        SanPham sanPham = sanPhamService.getSanPhamById(productId).orElse(null);
+
+        // Kiểm tra xem người dùng đã đánh giá sản phẩm chưa
+        AccKhachHang user = (AccKhachHang) session.getAttribute("user");
+        if (user != null) {
+            // Lấy đánh giá của người dùng nếu đã có
+            Reviews review = reviewsService.getReviewByUserAndProduct(user.getId(), productId);
+            if (review != null) {
+                model.addAttribute("review", review);
+            } else {
+                // Nếu chưa có đánh giá, tạo một đối tượng review rỗng
+                model.addAttribute("review", new Reviews());
+            }
+        }
+
+        model.addAttribute("sanPham", sanPham);
+
+        return "danhgiasanpham";  // Trang sửa đánh giá sản phẩm
+    }
+
+    // Xử lý sửa đánh giá sản phẩm
+    @PostMapping("/ghi-danh-gia")
+    public String saveReview(@RequestParam("productId") Long productId,
+                             @RequestParam("comment") String comment,
+                             HttpSession session) {
+        // Lấy thông tin người dùng từ session
+        AccKhachHang user = (AccKhachHang) session.getAttribute("user");
+
+        if (user == null) {
+            return "redirect:/giay/dang-nhap";  // Nếu người dùng chưa đăng nhập, chuyển đến trang đăng nhập
+        }
+
+        // Cập nhật đánh giá vào cơ sở dữ liệu
+        reviewsService.updateReview(user.getId(), productId, comment);  // Cập nhật review nếu đã có
+
+        return "redirect:/giay/san-pham"; // Sau khi sửa đánh giá, quay lại trang sản phẩm
     }
 }
 

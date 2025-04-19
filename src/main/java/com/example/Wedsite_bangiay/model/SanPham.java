@@ -33,4 +33,8 @@ public class SanPham {
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")  // 'category_id' tham chiếu đến 'id' trong bảng 'danhmuc'
     private DanhMuc danhMuc;  // Quan hệ với bảng DanhMuc
+
+    @ManyToOne
+    @JoinColumn(name = "donhang_id")
+    private DonHang donHang;  // Thiết lập quan hệ ManyToOne với DonHang
 }

@@ -33,8 +33,24 @@ public class AccKhachHangService {
     public List<AccKhachHang> searchKhachHang(String query) {
         return accKhachHangRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDiachiContainingIgnoreCase(query, query, query);
     }
-    // Tìm khách hàng theo username và password
+
+    // Tìm khách hàng theo username và password (đăng nhập)
     public AccKhachHang findByUsernameAndPassword(String username, String password) {
         return accKhachHangRepository.findByUsernameAndPassword(username, password);
+    }
+
+    // Kiểm tra xem username đã tồn tại chưa (đăng ký)
+    public boolean isUsernameExist(String username) {
+        return accKhachHangRepository.findByUsernameAndPassword(username, null) != null;
+    }
+
+    // Thêm mới khách hàng (đăng ký)
+    public AccKhachHang registerNewCustomer(AccKhachHang accKhachHang) {
+        // Kiểm tra username đã tồn tại chưa
+        if (isUsernameExist(accKhachHang.getUsername())) {
+            return null;  // Trả về null nếu username đã tồn tại
+        }
+        // Nếu username chưa tồn tại, lưu khách hàng mới
+        return accKhachHangRepository.save(accKhachHang);
     }
 }

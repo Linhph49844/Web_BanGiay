@@ -40,6 +40,11 @@ public class GioHangService {
 
     // Lưu giỏ hàng
     public GioHang save(GioHang gioHang) {
-        return gioHangRepository.save(gioHang);
+        return gioHangRepository.save(gioHang);  // Lưu giỏ hàng
     }
+
+    public void xoaToanBoGioHang(Long userId) {
+        gioHangRepository.deleteByUserId(userId);  // Xóa tất cả sản phẩm trong giỏ hàng của người dùng
+    }
+
 }

@@ -87,7 +87,7 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="@{/giay/hien-thi}">
                 <img src="https://cdn-icons-png.flaticon.com/128/869/869636.png" alt="Logo" width="40">
                 <strong>Shop Giày</strong>
             </a>
@@ -102,13 +102,12 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/giay/lien-he}">📞 Liên hệ</a></li>
                 </ul>
                 <!-- Tạo dropdown cho tài khoản người dùng -->
-                <!-- Tạo dropdown cho tài khoản người dùng -->
                 <div class="dropdown ms-auto">
                     <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span th:if="${user != null}" th:text="${user.username}">Tên tài khoản</span>  <!-- Hiển thị tên tài khoản -->
+                        <span th:text="${username}">Tên tài khoản</span> <!-- Hiển thị tên tài khoản -->
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="/giay/lich-su">Lịch sử mua hàng</a></li>
+                        <li><a class="dropdown-item" href="/giay/lich-su-mua-hang">Lịch sử mua hàng</a></li>
                         <li><a class="dropdown-item" href="/giay/dang-nhap">Chuyển tài khoản</a></li>
                         <li><a class="dropdown-item" href="/giay/dang-xuat">Đăng xuất</a></li>
                     </ul>
@@ -118,10 +117,10 @@
     </nav>
 </header>
 
-<!-- Danh sách giỏ hàng -->
+<!-- Giỏ hàng của bạn -->
+<!-- Giỏ hàng của bạn -->
 <section class="container mt-5">
     <h2 class="text-center">Giỏ Hàng của Bạn</h2>
-    <!-- Kiểm tra xem giỏ hàng có dữ liệu không -->
     <div th:if="${gioHangs != null}">
         <table class="table table-bordered text-white">
             <thead>
@@ -134,11 +133,9 @@
             </tr>
             </thead>
             <tbody>
-            <!-- Lặp qua các giỏ hàng -->
             <tr th:each="gioHang : ${gioHangs}">
                 <td th:text="${gioHang.product.name}">Tên sản phẩm</td>
                 <td>
-                    <!-- Cập nhật số lượng -->
                     <form th:action="@{/giay/gio-hang/cap-nhat/{gioHangId}(gioHangId=${gioHang.id})}" method="POST">
                         <input type="number" name="quantity" th:value="${gioHang.quantity}" min="1" class="form-control" required>
                         <input type="hidden" name="userId" th:value="${gioHang.user.id}">
@@ -148,31 +145,39 @@
                 <td th:text="${gioHang.product.price}">Giá</td>
                 <td th:text="${gioHang.quantity * gioHang.product.price}">Tổng giá</td>
                 <td>
-
                     <a th:href="'/giay/gio-hang/xoa/' + ${gioHang.id} + '?userId=' + ${gioHang.user.id}" class="btn btn-danger">Xóa</a>
-
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Hiển thị tên tài khoản nếu có -->
     <div th:if="${gioHangs != null and gioHangs.size() > 0}">
         <div>
-            <span>Chào, <span th:text="${gioHangs[0].user.username}">Tên tài khoản</span></span> <!-- Hiển thị tên người dùng -->
+            <h4>Tổng số tiền: <span th:text="${totalAmount}">Tổng tiền</span> VNĐ</h4>
         </div>
     </div>
 
-    <!-- Nếu giỏ hàng trống -->
     <div th:if="${gioHangs == null or gioHangs.isEmpty()}">
         <p>Giỏ hàng của bạn hiện tại đang trống.</p>
     </div>
 
-    <!-- Thêm các nút tiếp tục mua sắm hoặc thanh toán -->
+    <!-- Thanh toán -->
     <div class="text-center">
         <a href="/giay/san-pham" class="btn btn-primary">Tiếp tục mua sắm</a>
-        <a href="/giay/thanh-toan" class="btn btn-success">Thanh toán</a>
+        <!-- Form thanh toán -->
+        <form action="/thanhtoan/thanh-toan" method="POST">
+            <div class="form-group">
+                <label for="paymentMethod">Chọn phương thức thanh toán</label>
+                <select name="paymentMethod" id="paymentMethod" class="form-control" required>
+                    <option value="QR">Thanh toán qua QR</option>
+                    <option value="COD">Thanh toán khi nhận hàng</option>
+                </select>
+            </div>
+            <!-- Truyền userId vào hidden field -->
+            <input type="hidden" name="userId" th:value="${user.id}">
+            <button type="submit" class="btn btn-success mt-3">Thanh toán</button>
+        </form>
     </div>
 </section>
 
